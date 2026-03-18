@@ -33,7 +33,6 @@ I am a developer and university student at Vellore Institute of Technology, inte
 
 * **DREC (Personal AI Assistant):** Architecting a robust, custom AI assistant designed for seamless daily integration and task execution.
 * **EchoForge:** An automated pipeline for generating and deploying lyrical videos directly to social platforms.
-* **CyberShield:** Real-time anomaly detection system built for high-stakes cybersecurity environments.
 * **Cognitive Vehicular Network:** Hardware-integrated project focused on enhancing real-time driver awareness and safety.
 
 ---
@@ -41,11 +40,11 @@ I am a developer and university student at Vellore Institute of Technology, inte
 ### 📊 The Data
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=radium&hide_border=true" height="150" alt="GitHub Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_GITHUB_USERNAME&layout=compact&theme=radium&hide_border=true" height="150" alt="Top Languages" />
+  <img src="https://github-readme-stats.vercel.app/api?username=rs-raghu&show_icons=true&theme=radium&hide_border=true" height="150" alt="GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=rs-raghu&layout=compact&theme=radium&hide_border=true" height="150" alt="Top Languages" />
 </div>
 
 <div align="center">
   <i>Let's connect and build the future.</i><br>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+  <a href="https://linkedin.com/in/rsraghu2528"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
 </div>
