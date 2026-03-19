@@ -12,7 +12,7 @@ async function fetchBannerBase64() {
     const res = await fetch(BANNER_URL);
     if (!res.ok) return null;
     const buf = await res.arrayBuffer();
-    const bytes = new Uint8Array(buf); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); const b64 = btoa(bin);
+    const b64 = Buffer.from(buf).toString('base64');
     const mime = res.headers.get("content-type") || "image/png";
     return `data:${mime};base64,${b64}`;
   } catch {
@@ -366,4 +366,3 @@ module.exports = async function handler(req, res) {
     res.status(500).send(errSvg);
   }
 };
-// intentionally blank
