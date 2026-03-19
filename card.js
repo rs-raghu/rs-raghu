@@ -382,7 +382,7 @@ export default async function handler(req, res) {
   const svg = buildSVG(gh, lc);
 
   res.setHeader("Content-Type", "image/svg+xml");
-  res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
+  // res.setHeader("Access-Control-Allow-Origin", "*");
   res.status(200).send(svg);
 }
