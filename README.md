@@ -1,8 +1,8 @@
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,30:0d1f38,70:1a1f4e,100:58a6ff&height=240&section=header&text=rs-raghu&fontSize=72&fontColor=e6edf3&animation=fadeIn&fontAlignY=38&desc=Full-Stack%20Developer%20%7C%20AI%2FML%20Enthusiast%20%7C%20LeetCode%20Grinder&descAlignY=55&descSize=17&descColor=8b949e" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=slice&color=0:0d1117,30:0d1f38,70:1a1f4e,100:58a6ff&height=240&section=header&text=rs-raghu&fontSize=72&fontColor=e6edf3&animation=fadeIn&fontAlignY=38&desc=AI%2FML%20Enthusiast%20%7C%20LeetCode%20Grinder&descAlignY=55&descSize=17&descColor=8b949e" />
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=800&color=58A6FF&center=true&vCenter=true&width=580&lines=Full-Stack+Developer+%F0%9F%92%BB;AI%2FML+Enthusiast+%F0%9F%A4%96;LeetCode+Grinder+%F0%9F%A7%A9;Open+Source+Contributor+%F0%9F%8C%B1;Python+Wrangler+%F0%9F%90%8D" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=800&color=58A6FF&center=true&vCenter=true&width=580&lines=AI%2FML+Enthusiast;LeetCode+Grinder;Open+Source+Contributor;Python+Wrangler;Always+Learning" alt="Typing SVG" />
 
 <br/><br/>
 
@@ -17,7 +17,7 @@
 ```yaml
 name: Raghu
 location: India 🇮🇳
-role: AI/ML Enthusiast
+role: Full-Stack Developer & AI/ML Enthusiast
 currently_building: winsomegin 🚀
 learning:
   - ML Models 🤖
@@ -178,6 +178,6 @@ open_to: Collaborations & New Opportunities
 
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:58a6ff,40:bc8cff,70:ffa657,100:0d1117&height=130&section=footer" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=slice&color=0:58a6ff,40:bc8cff,70:ffa657,100:0d1117&height=130&section=footer" />
 
 </div>
