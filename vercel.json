@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "routes": [
-    {
-      "src": "/api/card",
-      "dest": "/api/card.js"
-    }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
