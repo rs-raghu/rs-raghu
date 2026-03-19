@@ -6,10 +6,6 @@
 
 <br/><br/>
 
-![Profile Views](https://komarev.com/ghpvc/?username=rs-raghu&color=58a6ff&style=flat-square&label=Profile+Views)
-![Followers](https://img.shields.io/github/followers/rs-raghu?style=flat-square&color=bc8cff&label=Followers)
-![Stars](https://img.shields.io/github/stars/rs-raghu?style=flat-square&color=f78166&label=Total+Stars)
-
 </div>
 
 ---
@@ -21,7 +17,7 @@
 ```yaml
 name: Raghu
 location: India 🇮🇳
-role: Full-Stack Developer & AI/ML Enthusiast
+role: AI/ML Enthusiast
 currently_building: winsomegin 🚀
 learning:
   - ML Models 🤖
