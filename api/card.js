@@ -341,7 +341,7 @@ ${[
 }
 
 // ─── Handler ─────────────────────────────────────────
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     const [gh, lc, bannerData] = await Promise.all([
       fetchGitHub(),
