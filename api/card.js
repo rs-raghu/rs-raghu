@@ -1,5 +1,5 @@
 // ╔══════════════════════════════════════════════════════╗
-// ║   rs-raghu GitHub Profile Card — Vercel Serverless   ║
+// ║   rs-raghu GitHub Profile Card — Vercel Serverless  ║
 // ╚══════════════════════════════════════════════════════╝
 
 const GITHUB_USER   = "rs-raghu";
