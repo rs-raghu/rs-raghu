@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://rs-raghu.vercel.app/api/card?v=redblood" width="100%" alt="Raghu's GitHub Profile Card"/>
+<img src="https://rs-raghu.vercel.app/api/card?v=red" width="100%" alt="Raghu's GitHub Profile Card"/>
 
 <br><br>
 
