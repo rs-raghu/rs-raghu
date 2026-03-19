@@ -1,7 +1,3 @@
-// ╔══════════════════════════════════════════════════════╗
-// ║   rs-raghu GitHub Profile Card — Vercel Serverless  ║
-// ╚══════════════════════════════════════════════════════╝
-
 const GITHUB_USER   = "rs-raghu";
 const LEETCODE_USER = "rs-raghu";
 const BANNER_URL    = "https://raw.githubusercontent.com/rs-raghu/rs-raghu/main/assets/banner.png";
@@ -83,16 +79,15 @@ async function fetchLeetCode() {
 
 // ─── SVG Builder ─────────────────────────────────────
 function buildSVG(gh, lc, bannerData) {
-  const W = 680, H = 560;
+  // Height reduced from 560 to 480 because we removed social links
+  const W = 680, H = 480;
 
-  // LeetCode donut
   const r = 30, circ = 2 * Math.PI * r;
   const ef = lc.total > 0 ? lc.easy   / lc.total : 0;
   const mf = lc.total > 0 ? lc.medium / lc.total : 0;
   const hf = lc.total > 0 ? lc.hard   / lc.total : 0;
   const eL = ef * circ, mL = mf * circ, hL = hf * circ;
 
-  // Activity bars
   const BH = [8,14,6,18,22,10,28,16,8,32,20,12,26,18,30,14,8,24,36,18,10,28,22,16,32,12,20,28,10,36,24,18,8,26,20,14,30,16,24,12,28,18,36,10,22,16,28,20];
   const BC = BH.map(h => h > 28 ? '#e84040' : h > 18 ? '#cc2200' : h > 10 ? '#8b1a1a' : '#2a1010');
 
@@ -101,10 +96,9 @@ function buildSVG(gh, lc, bannerData) {
   const starsBar = Math.round((gh.stars / Math.max(gh.stars, 500)) * 128);
   const reposBar = Math.round((gh.public_repos / Math.max(gh.public_repos, 80)) * 128);
 
-  // Typing phrases — SMIL fade cycle (each shows 2.4s, total 12s loop)
   const phrases = ["AI/ML Enthusiast","LeetCode Grinder","Open Source Contributor","Python Wrangler","Always Learning"];
-  const dur     = 12; // total loop seconds
-  const step    = dur / phrases.length; // 2.4s each
+  const dur     = 12; 
+  const step    = dur / phrases.length; 
 
   const typingTexts = phrases.map((p, i) => {
     const start  = i * step;
@@ -117,11 +111,29 @@ function buildSVG(gh, lc, bannerData) {
     </text>`;
   }).join('\n  ');
 
-  // Banner: use base64 if available, else gradient fallback
   const bannerEl = bannerData
     ? `<image href="${bannerData}" x="0" y="0" width="${W}" height="150"
         preserveAspectRatio="xMidYMid slice" clip-path="url(#bannerClip)"/>`
     : `<rect x="0" y="0" width="${W}" height="150" fill="#1a0505"/>`;
+
+  // Dynamic width calculation for tech pills to prevent overlap
+  let xOffset1 = 340;
+  const techRow1 = ["Python", "Java", "JavaScript", "React", "SQL"].map((t) => {
+    const w = t.length * 7 + 14;
+    const res = `<rect x="${xOffset1}" y="408" width="${w}" height="18" rx="9" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
+    <text x="${xOffset1 + w/2}" y="420" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
+    xOffset1 += w + 6;
+    return res;
+  }).join('\n');
+
+  let xOffset2 = 340;
+  const techRow2 = ["TensorFlow", "PyTorch", "Scikit", "NumPy", "Pandas"].map((t) => {
+    const w = t.length * 7 + 14;
+    const res = `<rect x="${xOffset2}" y="432" width="${w}" height="18" rx="9" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
+    <text x="${xOffset2 + w/2}" y="444" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
+    xOffset2 += w + 6;
+    return res;
+  }).join('\n');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
@@ -157,16 +169,13 @@ function buildSVG(gh, lc, bannerData) {
   </filter>
 </defs>
 
-<!-- Card bg -->
 <rect width="${W}" height="${H}" rx="12" fill="#0a0c0f" clip-path="url(#cardClip)"/>
 
-<!-- ░░ BANNER ░░ -->
 <g filter="url(#dimBanner)">${bannerEl}</g>
 <rect x="0" y="0" width="${W}" height="150" fill="url(#bannerFade)"/>
 <rect x="0" y="0" width="${W}" height="150" fill="url(#leftVig)"/>
 <rect x="0" y="0" width="${W}" height="2" rx="1" fill="url(#redLine)"/>
 
-<!-- Samurai moon icon -->
 <g transform="translate(22, 38)">
   <circle cx="36" cy="36" r="36" fill="#0a0a0a" opacity="0.55"/>
   <circle cx="36" cy="36" r="34" fill="none" stroke="#cc2200" stroke-width="1.5" opacity="0.55"/>
@@ -183,14 +192,11 @@ function buildSVG(gh, lc, bannerData) {
   <line x1="19" y1="30" x2="29" y2="40" stroke="#090b0e" stroke-width="1.4" opacity="0.7"/>
 </g>
 
-<!-- Name + handle -->
 <text x="110" y="72" font-size="26" font-weight="700" fill="#e6edf3" font-family="'Courier New',monospace" letter-spacing="-0.5">Raghu</text>
 <text x="215" y="70" font-size="13" font-weight="400" fill="#cc2200" font-family="'Courier New',monospace">/ rs-raghu</text>
 
-<!-- Cycling typing phrases -->
 ${typingTexts}
 
-<!-- Pills -->
 <rect x="110" y="122" width="38" height="17" rx="8.5" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
 <text x="129" y="134" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">India</text>
 <rect x="154" y="122" width="68" height="17" rx="8.5" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
@@ -198,40 +204,29 @@ ${typingTexts}
 <rect x="228" y="122" width="42" height="17" rx="8.5" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
 <text x="249" y="134" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">AI / ML</text>
 
-<!-- ═══ ROW 1: INFO CARDS (role/building/learning/status) ═══ -->
 <text x="16" y="174" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">ABOUT</text>
 
-<rect x="16" y="182" width="156" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
+<rect x="16" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <rect x="16" y="182" width="3" height="52" rx="1" fill="#cc2200"/>
 <text x="26" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">role</text>
 <text x="26" y="213" font-size="13" font-weight="600" fill="#e6edf3" font-family="'Courier New',monospace">AI / ML Dev</text>
 <text x="26" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Python · TensorFlow</text>
 
-<rect x="178" y="182" width="156" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="178" y="182" width="3" height="52" rx="1" fill="#e84040"/>
-<text x="188" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">building</text>
-<text x="188" y="213" font-size="13" font-weight="600" fill="#e84040" font-family="'Courier New',monospace">winsomegin</text>
-<circle cx="188" cy="222" r="3.5" fill="#3fb950"><animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/></circle>
-<text x="196" y="226" font-size="9" fill="#3fb950" font-family="'Courier New',monospace">active</text>
+<rect x="232" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
+<rect x="232" y="182" width="3" height="52" rx="1" fill="#e84040"/>
+<text x="242" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">building</text>
+<text x="242" y="213" font-size="13" font-weight="600" fill="#e84040" font-family="'Courier New',monospace">winsomegin</text>
 
-<rect x="340" y="182" width="156" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="340" y="182" width="3" height="52" rx="1" fill="#ffa657"/>
-<text x="350" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">learning</text>
-<text x="350" y="213" font-size="13" font-weight="600" fill="#ffa657" font-family="'Courier New',monospace">ML Models</text>
-<text x="350" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">DSA · Data Structures</text>
+<rect x="448" y="182" width="216" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
+<rect x="448" y="182" width="3" height="52" rx="1" fill="#ffa657"/>
+<text x="458" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">learning</text>
+<text x="458" y="213" font-size="13" font-weight="600" fill="#ffa657" font-family="'Courier New',monospace">ML Models</text>
+<text x="458" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">DSA · Data Structures</text>
 
-<rect x="502" y="182" width="162" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="502" y="182" width="3" height="52" rx="1" fill="#bc8cff"/>
-<text x="512" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">fun fact</text>
-<text x="512" y="211" font-size="9" fill="#c9d1d9" font-family="'Courier New',monospace">Trains ML models</text>
-<text x="512" y="224" font-size="9" fill="#c9d1d9" font-family="'Courier New',monospace">by day, gets trained</text>
-<text x="512" y="226" font-size="8" fill="#484f58" font-family="'Courier New',monospace"> </text>
 
-<!-- ═══ ROW 2: GITHUB + LEETCODE ═══ -->
 <text x="16" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">GITHUB</text>
 <text x="340" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">LEETCODE — RS-RAGHU</text>
 
-<!-- GitHub cards -->
 <rect x="16"  y="262" width="148" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <text x="26"  y="279" font-size="9" fill="#484f58" font-family="'Courier New',monospace">Total Commits</text>
 <text x="26"  y="296" font-size="17" font-weight="700" fill="#58a6ff" font-family="'Courier New',monospace">1,204</text>
@@ -256,7 +251,6 @@ ${typingTexts}
 <rect x="180" y="359" width="128" height="3" rx="1.5" fill="#1e2328"/>
 <rect x="180" y="359" width="0"   height="3" rx="1.5" fill="#3fb950"><animate attributeName="width" from="0" to="96" dur="1.2s" begin="0.9s" fill="freeze"/></rect>
 
-<!-- LeetCode donut -->
 <g transform="translate(356, 262)">
   <circle cx="38" cy="38" r="${r}" fill="none" stroke="#1e2328" stroke-width="9"/>
   <circle cx="38" cy="38" r="${r}" fill="none" stroke="#3fb950" stroke-width="9"
@@ -275,7 +269,6 @@ ${typingTexts}
   <text x="38" y="47" text-anchor="middle" font-size="8" fill="#484f58" font-family="'Courier New',monospace">solved</text>
 </g>
 
-<!-- Easy/Med/Hard -->
 <rect x="446" y="262" width="68" height="42" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <text x="480" y="279" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Easy</text>
 <text x="480" y="295" font-size="15" font-weight="700" fill="#3fb950" text-anchor="middle" font-family="'Courier New',monospace">${lc.easy}</text>
@@ -288,7 +281,6 @@ ${typingTexts}
 <text x="628" y="279" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Hard</text>
 <text x="628" y="295" font-size="15" font-weight="700" fill="#e84040" text-anchor="middle" font-family="'Courier New',monospace">${lc.hard}</text>
 
-<!-- Streak + Rank -->
 <rect x="446" y="310" width="106" height="62" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <text x="499" y="327" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Streak</text>
 <text x="499" y="346" font-size="18" font-weight="700" fill="#ffa657" text-anchor="middle" font-family="'Courier New',monospace">Live 🔥</text>
@@ -299,7 +291,6 @@ ${typingTexts}
 <text x="610" y="346" font-size="14" font-weight="700" fill="#ffd700" text-anchor="middle" font-family="'Courier New',monospace">${rankStr}</text>
 <text x="610" y="362" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">leetcode.com</text>
 
-<!-- ═══ ROW 3: ACTIVITY + TECH ═══ -->
 <text x="16" y="392" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">CONTRIBUTION ACTIVITY</text>
 <rect x="16" y="400" width="302" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <g transform="translate(22, 404)">
@@ -308,34 +299,10 @@ ${typingTexts}
 
 <text x="330" y="392" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">TECH STACK</text>
 <rect x="330" y="400" width="334" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-${["Python","Java","JavaScript","React","HTML/CSS","MySQL"].map((t,i) => {
-  const w = t.length * 6 + 12;
-  return `<rect x="${340+i*54}" y="408" width="${w}" height="16" rx="8" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
-<text x="${340+i*54+w/2}" y="420" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
-}).join('\n')}
-${["TensorFlow","PyTorch","Scikit","NumPy","Pandas"].map((t,i) => {
-  const w = t.length * 6 + 12;
-  return `<rect x="${340+i*62}" y="428" width="${w}" height="16" rx="8" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
-<text x="${340+i*62+w/2}" y="440" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
-}).join('\n')}
 
-<!-- ═══ ROW 4: SOCIAL LINKS (clickable!) ═══ -->
-${[
-  {label:"LeetCode", url:"https://leetcode.com/rs-raghu",                col:"#ffa657", x:16},
-  {label:"Twitter",  url:"https://twitter.com/_rs_raghu",                col:"#1da1f2", x:150},
-  {label:"LinkedIn", url:"https://linkedin.com/in/rsraghu2528",          col:"#0077b5", x:284},
-  {label:"Dev.to",   url:"https://dev.to/rs-raghu",                      col:"#8b9cf8", x:418},
-  {label:"Gmail",    url:"mailto:raghuneshram@gmail.com",                col:"#ea4335", x:490},
-].map(({label,url,col,x}) => {
-  const w = label === "Gmail" ? 174 : 128;
-  return `<a href="${url}" target="_blank">
-  <rect x="${x}" y="468" width="${w}" height="34" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-  <rect x="${x}" y="468" width="3" height="34" rx="1" fill="${col}"/>
-  <text x="${x+w/2+2}" y="490" font-size="11" font-weight="600" fill="${col}" text-anchor="middle" font-family="'Courier New',monospace">${label}</text>
-</a>`;
-}).join('\n')}
+${techRow1}
+${techRow2}
 
-<!-- Bottom red accent -->
 <rect x="0" y="${H-2}" width="${W}" height="2" rx="1" fill="url(#redLine)"/>
 </svg>`;
 }
@@ -356,7 +323,6 @@ export default async function handler(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.status(200).send(svg);
   } catch (err) {
-    // Return error as visible SVG so we can read it
     const errSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="680" height="80">
       <rect width="680" height="80" fill="#1a0000"/>
       <text x="20" y="30" font-size="12" fill="#ff4444" font-family="monospace">ERROR: ${err.message}</text>
@@ -365,4 +331,4 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "image/svg+xml");
     res.status(500).send(errSvg);
   }
-};
+}
