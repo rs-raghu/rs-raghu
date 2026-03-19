@@ -12,7 +12,7 @@ async function fetchBannerBase64() {
     const res = await fetch(BANNER_URL);
     if (!res.ok) return null;
     const buf = await res.arrayBuffer();
-    const b64 = Buffer.from(buf).toString("base64");
+    const bytes = new Uint8Array(buf); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); const b64 = btoa(bin);
     const mime = res.headers.get("content-type") || "image/png";
     return `data:${mime};base64,${b64}`;
   } catch {
@@ -342,16 +342,28 @@ ${[
 
 // ─── Handler ─────────────────────────────────────────
 module.exports = async function handler(req, res) {
-  const [gh, lc, bannerData] = await Promise.all([
-    fetchGitHub(),
-    fetchLeetCode(),
-    fetchBannerBase64(),
-  ]);
+  try {
+    const [gh, lc, bannerData] = await Promise.all([
+      fetchGitHub(),
+      fetchLeetCode(),
+      fetchBannerBase64(),
+    ]);
 
-  const svg = buildSVG(gh, lc, bannerData);
+    const svg = buildSVG(gh, lc, bannerData);
 
-  res.setHeader("Content-Type", "image/svg+xml");
-  res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.status(200).send(svg);
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.status(200).send(svg);
+  } catch (err) {
+    // Return error as visible SVG so we can read it
+    const errSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="680" height="80">
+      <rect width="680" height="80" fill="#1a0000"/>
+      <text x="20" y="30" font-size="12" fill="#ff4444" font-family="monospace">ERROR: ${err.message}</text>
+      <text x="20" y="52" font-size="10" fill="#884444" font-family="monospace">${(err.stack||'').split('\n')[1]||''}</text>
+    </svg>`;
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.status(500).send(errSvg);
+  }
 };
+// intentionally blank
