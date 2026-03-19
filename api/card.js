@@ -1,6 +1,5 @@
 const GITHUB_USER   = "rs-raghu";
 const LEETCODE_USER = "rs-raghu";
-// Pointing directly to your GIF
 const BANNER_URL    = "https://raw.githubusercontent.com/rs-raghu/rs-raghu/main/assets/banner.gif";
 
 // ─── Fetch & base64 encode banner image (GIF Support) ──────────────
@@ -80,7 +79,6 @@ async function fetchLeetCode() {
 
 // ─── SVG Builder ─────────────────────────────────────
 function buildSVG(gh, lc, bannerData) {
-  // Shrunk the height to 470px since social links are gone
   const W = 680, H = 470;
 
   const r = 30, circ = 2 * Math.PI * r;
@@ -89,8 +87,9 @@ function buildSVG(gh, lc, bannerData) {
   const hf = lc.total > 0 ? lc.hard   / lc.total : 0;
   const eL = ef * circ, mL = mf * circ, hL = hf * circ;
 
+  // Minimal Contribution Bar Colors (Grays instead of neon red)
   const BH = [8,14,6,18,22,10,28,16,8,32,20,12,26,18,30,14,8,24,36,18,10,28,22,16,32,12,20,28,10,36,24,18,8,26,20,14,30,16,24,12,28,18,36,10,22,16,28,20];
-  const BC = BH.map(h => h > 28 ? '#e84040' : h > 18 ? '#cc2200' : h > 10 ? '#8b1a1a' : '#2a1010');
+  const BC = BH.map(h => h > 28 ? '#24292f' : h > 18 ? '#57606a' : h > 10 ? '#9cabbb' : '#d0d7de');
 
   const rankStr  = lc.ranking > 0 ? `#${lc.ranking.toLocaleString()}` : "N/A";
   const starsStr = gh.stars >= 1000 ? `${(gh.stars/1000).toFixed(1)}k` : String(gh.stars);
@@ -98,25 +97,25 @@ function buildSVG(gh, lc, bannerData) {
   const reposBar = Math.round((gh.public_repos / Math.max(gh.public_repos, 80)) * 128);
 
   const bannerEl = bannerData
-    ? `<image href="${bannerData}" x="0" y="0" width="${W}" height="150"
-        preserveAspectRatio="xMidYMid slice" clip-path="url(#bannerClip)"/>`
-    : `<rect x="0" y="0" width="${W}" height="150" fill="#1a0505"/>`;
+    ? `<image href="${bannerData}" x="0" y="0" width="${W}" height="150" preserveAspectRatio="xMidYMid slice" clip-path="url(#bannerClip)"/>`
+    : `<rect x="0" y="0" width="${W}" height="150" fill="#f6f8fa"/>`;
 
-  // Dynamic width calculation for tech pills to guarantee NO overlap
+  // Tech Pills - Dynamic width & Minimal Styling
   let xOffset1 = 340;
   const techRow1 = ["Python", "Java", "JavaScript", "React", "HTML/CSS"].map((t) => {
     const w = t.length * 7.5 + 14; 
-    const res = `<rect x="${xOffset1}" y="408" width="${w}" height="18" rx="9" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
-    <text x="${xOffset1 + w/2}" y="420" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
-    xOffset1 += w + 8; // Added 8px of hard spacing between elements
+    const res = `<rect x="${xOffset1}" y="408" width="${w}" height="18" rx="9" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+    <text x="${xOffset1 + w/2}" y="420" font-size="9" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
+    xOffset1 += w + 8; 
     return res;
   }).join('\n');
 
   let xOffset2 = 340;
   const techRow2 = ["TensorFlow", "PyTorch", "Scikit", "NumPy", "Pandas"].map((t) => {
     const w = t.length * 7.5 + 14;
-    const res = `<rect x="${xOffset2}" y="432" width="${w}" height="18" rx="9" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
-    <text x="${xOffset2 + w/2}" y="444" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
+    // Soft Sakura pink highlight for AI tools
+    const res = `<rect x="${xOffset2}" y="432" width="${w}" height="18" rx="9" fill="#fff0f6" stroke="#fbcfe8" stroke-width="1"/>
+    <text x="${xOffset2 + w/2}" y="444" font-size="9" fill="#be185d" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
     xOffset2 += w + 8;
     return res;
   }).join('\n');
@@ -124,131 +123,131 @@ function buildSVG(gh, lc, bannerData) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&amp;display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Potta+One&amp;display=swap');
   </style>
   <clipPath id="bannerClip"><rect x="0" y="0" width="${W}" height="150" rx="12" ry="12"/></clipPath>
   <clipPath id="cardClip"><rect x="0" y="0" width="${W}" height="${H}" rx="12" ry="12"/></clipPath>
-  <linearGradient id="redLine" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#0a0c0f"/>
-    <stop offset="30%"  stop-color="#8b0000"/>
-    <stop offset="50%"  stop-color="#cc2200"/>
-    <stop offset="70%"  stop-color="#8b0000"/>
-    <stop offset="100%" stop-color="#0a0c0f"/>
+  
+  <linearGradient id="minimalLine" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#f6f8fa"/>
+    <stop offset="50%"  stop-color="#f472b6"/>
+    <stop offset="100%" stop-color="#f6f8fa"/>
   </linearGradient>
+
   <linearGradient id="leftVig" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"  stop-color="#000000" stop-opacity="0.85"/>
-    <stop offset="40%" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.85"/>
+    <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
   </linearGradient>
 </defs>
 
-<rect width="${W}" height="${H}" rx="12" fill="#0a0c0f" clip-path="url(#cardClip)"/>
+<rect width="${W}" height="${H}" rx="12" fill="#f6f8fa" clip-path="url(#cardClip)"/>
 
 ${bannerEl}
 <rect x="0" y="0" width="${W}" height="150" fill="url(#leftVig)"/>
-<rect x="0" y="0" width="${W}" height="2" rx="1" fill="url(#redLine)"/>
+<rect x="0" y="0" width="${W}" height="2" rx="1" fill="url(#minimalLine)"/>
 
-<text x="36" y="80" font-size="36" font-weight="600" fill="#ffffff" font-family="'Cinzel', serif, 'Courier New'" letter-spacing="2">Raghu</text>
-<text x="38" y="110" font-size="14" font-weight="400" fill="#ffb7b2" font-family="'Courier New',monospace" letter-spacing="1">AI / ML Enthusiast</text>
+<text x="80" y="80" font-size="34" fill="#000000" font-family="'Potta One', cursive" letter-spacing="1">Raghu</text>
+<text x="82" y="110" font-size="13" font-weight="600" fill="#57606a" font-family="'Courier New',monospace" letter-spacing="1">AI / ML Enthusiast</text>
 
-<text x="16" y="174" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">ABOUT</text>
+<text x="16" y="174" font-size="9" fill="#57606a" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">ABOUT</text>
 
-<rect x="16" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="16" y="182" width="3" height="52" rx="1" fill="#cc2200"/>
-<text x="28" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">role</text>
-<text x="28" y="213" font-size="14" font-weight="600" fill="#e6edf3" font-family="'Courier New',monospace">AI / ML Dev</text>
-<text x="28" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Python · TensorFlow</text>
+<rect x="16" y="182" width="206" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<rect x="16" y="182" width="3" height="52" rx="1" fill="#94a3b8"/>
+<text x="28" y="198" font-size="8" fill="#57606a" font-family="'Courier New',monospace">role</text>
+<text x="28" y="213" font-size="14" font-weight="600" fill="#24292f" font-family="'Courier New',monospace">AI / ML Dev</text>
+<text x="28" y="226" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Python · TensorFlow</text>
 
-<rect x="232" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="232" y="182" width="3" height="52" rx="1" fill="#e84040"/>
-<text x="244" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">building</text>
-<text x="244" y="213" font-size="14" font-weight="600" fill="#e84040" font-family="'Courier New',monospace">winsomegin</text>
+<rect x="232" y="182" width="206" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<rect x="232" y="182" width="3" height="52" rx="1" fill="#f472b6"/>
+<text x="244" y="198" font-size="8" fill="#57606a" font-family="'Courier New',monospace">building</text>
+<text x="244" y="213" font-size="14" font-weight="600" fill="#24292f" font-family="'Courier New',monospace">winsomegin</text>
 
-<rect x="448" y="182" width="216" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<rect x="448" y="182" width="3" height="52" rx="1" fill="#ffa657"/>
-<text x="460" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">focusing on</text>
-<text x="460" y="213" font-size="14" font-weight="600" fill="#ffa657" font-family="'Courier New',monospace">ML Models &amp; DSA</text>
-<text x="460" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Algorithms · Training</text>
+<rect x="448" y="182" width="216" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<rect x="448" y="182" width="3" height="52" rx="1" fill="#fbbf24"/>
+<text x="460" y="198" font-size="8" fill="#57606a" font-family="'Courier New',monospace">focusing on</text>
+<text x="460" y="213" font-size="14" font-weight="600" fill="#24292f" font-family="'Courier New',monospace">ML Models &amp; DSA</text>
+<text x="460" y="226" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Algorithms · Training</text>
 
-<text x="16" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">GITHUB</text>
-<text x="340" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">LEETCODE — RS-RAGHU</text>
+<text x="16" y="254" font-size="9" fill="#57606a" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">GITHUB</text>
+<text x="340" y="254" font-size="9" fill="#57606a" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">LEETCODE — RS-RAGHU</text>
 
-<rect x="16"  y="262" width="148" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="26"  y="279" font-size="9" fill="#484f58" font-family="'Courier New',monospace">Total Commits</text>
-<text x="26"  y="296" font-size="17" font-weight="700" fill="#58a6ff" font-family="'Courier New',monospace">1,204</text>
-<rect x="26"  y="301" width="128" height="3" rx="1.5" fill="#1e2328"/>
-<rect x="26"  y="301" width="0"   height="3" rx="1.5" fill="#58a6ff"><animate attributeName="width" from="0" to="107" dur="1.2s" begin="0.3s" fill="freeze"/></rect>
+<rect x="16"  y="262" width="148" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="26"  y="279" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Total Commits</text>
+<text x="26"  y="296" font-size="17" font-weight="700" fill="#24292f" font-family="'Courier New',monospace">1,204</text>
+<rect x="26"  y="301" width="128" height="3" rx="1.5" fill="#e5e7eb"/>
+<rect x="26"  y="301" width="0"   height="3" rx="1.5" fill="#94a3b8"><animate attributeName="width" from="0" to="107" dur="1.2s" begin="0.3s" fill="freeze"/></rect>
 
-<rect x="170" y="262" width="148" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="180" y="279" font-size="9" fill="#484f58" font-family="'Courier New',monospace">Stars Earned</text>
-<text x="180" y="296" font-size="17" font-weight="700" fill="#e84040" font-family="'Courier New',monospace">${starsStr}</text>
-<rect x="180" y="301" width="128" height="3" rx="1.5" fill="#1e2328"/>
-<rect x="180" y="301" width="0"   height="3" rx="1.5" fill="#e84040"><animate attributeName="width" from="0" to="${Math.max(starsBar,4)}" dur="1.2s" begin="0.5s" fill="freeze"/></rect>
+<rect x="170" y="262" width="148" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="180" y="279" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Stars Earned</text>
+<text x="180" y="296" font-size="17" font-weight="700" fill="#24292f" font-family="'Courier New',monospace">${starsStr}</text>
+<rect x="180" y="301" width="128" height="3" rx="1.5" fill="#e5e7eb"/>
+<rect x="180" y="301" width="0"   height="3" rx="1.5" fill="#f472b6"><animate attributeName="width" from="0" to="${Math.max(starsBar,4)}" dur="1.2s" begin="0.5s" fill="freeze"/></rect>
 
-<rect x="16"  y="320" width="148" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="26"  y="337" font-size="9" fill="#484f58" font-family="'Courier New',monospace">Public Repos</text>
-<text x="26"  y="354" font-size="17" font-weight="700" fill="#bc8cff" font-family="'Courier New',monospace">${gh.public_repos}</text>
-<rect x="26"  y="359" width="128" height="3" rx="1.5" fill="#1e2328"/>
-<rect x="26"  y="359" width="0"   height="3" rx="1.5" fill="#bc8cff"><animate attributeName="width" from="0" to="${Math.max(reposBar,4)}" dur="1.2s" begin="0.7s" fill="freeze"/></rect>
+<rect x="16"  y="320" width="148" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="26"  y="337" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Public Repos</text>
+<text x="26"  y="354" font-size="17" font-weight="700" fill="#24292f" font-family="'Courier New',monospace">${gh.public_repos}</text>
+<rect x="26"  y="359" width="128" height="3" rx="1.5" fill="#e5e7eb"/>
+<rect x="26"  y="359" width="0"   height="3" rx="1.5" fill="#a78bfa"><animate attributeName="width" from="0" to="${Math.max(reposBar,4)}" dur="1.2s" begin="0.7s" fill="freeze"/></rect>
 
-<rect x="170" y="320" width="148" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="180" y="337" font-size="9" fill="#484f58" font-family="'Courier New',monospace">Top Language</text>
-<text x="180" y="354" font-size="16" font-weight="700" fill="#3fb950" font-family="'Courier New',monospace">${gh.topLang}</text>
-<rect x="180" y="359" width="128" height="3" rx="1.5" fill="#1e2328"/>
-<rect x="180" y="359" width="0"   height="3" rx="1.5" fill="#3fb950"><animate attributeName="width" from="0" to="96" dur="1.2s" begin="0.9s" fill="freeze"/></rect>
+<rect x="170" y="320" width="148" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="180" y="337" font-size="9" fill="#57606a" font-family="'Courier New',monospace">Top Language</text>
+<text x="180" y="354" font-size="16" font-weight="700" fill="#24292f" font-family="'Courier New',monospace">${gh.topLang}</text>
+<rect x="180" y="359" width="128" height="3" rx="1.5" fill="#e5e7eb"/>
+<rect x="180" y="359" width="0"   height="3" rx="1.5" fill="#34d399"><animate attributeName="width" from="0" to="96" dur="1.2s" begin="0.9s" fill="freeze"/></rect>
 
 <g transform="translate(356, 262)">
-  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#1e2328" stroke-width="9"/>
-  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#3fb950" stroke-width="9"
+  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#e5e7eb" stroke-width="9"/>
+  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#34d399" stroke-width="9"
     stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${(circ - eL).toFixed(2)}" transform="rotate(-90 38 38)">
     <animate attributeName="stroke-dashoffset" from="${circ.toFixed(2)}" to="${(circ-eL).toFixed(2)}" dur="1.2s" begin="0.4s" fill="freeze"/>
   </circle>
-  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#ffa657" stroke-width="9"
+  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#fbbf24" stroke-width="9"
     stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${(circ - mL).toFixed(2)}" transform="rotate(${(-90 + ef*360).toFixed(1)} 38 38)">
     <animate attributeName="stroke-dashoffset" from="${circ.toFixed(2)}" to="${(circ-mL).toFixed(2)}" dur="1.2s" begin="0.6s" fill="freeze"/>
   </circle>
-  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#e84040" stroke-width="9"
+  <circle cx="38" cy="38" r="${r}" fill="none" stroke="#f87171" stroke-width="9"
     stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${(circ - hL).toFixed(2)}" transform="rotate(${(-90 + (ef+mf)*360).toFixed(1)} 38 38)">
     <animate attributeName="stroke-dashoffset" from="${circ.toFixed(2)}" to="${(circ-hL).toFixed(2)}" dur="1.2s" begin="0.8s" fill="freeze"/>
   </circle>
-  <text x="38" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="#e6edf3" font-family="'Courier New',monospace">${lc.total}</text>
-  <text x="38" y="47" text-anchor="middle" font-size="8" fill="#484f58" font-family="'Courier New',monospace">solved</text>
+  <text x="38" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="#24292f" font-family="'Courier New',monospace">${lc.total}</text>
+  <text x="38" y="47" text-anchor="middle" font-size="8" fill="#57606a" font-family="'Courier New',monospace">solved</text>
 </g>
 
-<rect x="446" y="262" width="68" height="42" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="480" y="279" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Easy</text>
-<text x="480" y="295" font-size="15" font-weight="700" fill="#3fb950" text-anchor="middle" font-family="'Courier New',monospace">${lc.easy}</text>
+<rect x="446" y="262" width="68" height="42" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="480" y="279" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">Easy</text>
+<text x="480" y="295" font-size="15" font-weight="700" fill="#34d399" text-anchor="middle" font-family="'Courier New',monospace">${lc.easy}</text>
 
-<rect x="520" y="262" width="68" height="42" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="554" y="279" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Medium</text>
-<text x="554" y="295" font-size="15" font-weight="700" fill="#ffa657" text-anchor="middle" font-family="'Courier New',monospace">${lc.medium}</text>
+<rect x="520" y="262" width="68" height="42" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="554" y="279" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">Medium</text>
+<text x="554" y="295" font-size="15" font-weight="700" fill="#fbbf24" text-anchor="middle" font-family="'Courier New',monospace">${lc.medium}</text>
 
-<rect x="594" y="262" width="68" height="42" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="628" y="279" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Hard</text>
-<text x="628" y="295" font-size="15" font-weight="700" fill="#e84040" text-anchor="middle" font-family="'Courier New',monospace">${lc.hard}</text>
+<rect x="594" y="262" width="68" height="42" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="628" y="279" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">Hard</text>
+<text x="628" y="295" font-size="15" font-weight="700" fill="#f87171" text-anchor="middle" font-family="'Courier New',monospace">${lc.hard}</text>
 
-<rect x="446" y="310" width="106" height="62" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="499" y="327" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Streak</text>
-<text x="499" y="346" font-size="18" font-weight="700" fill="#ffa657" text-anchor="middle" font-family="'Courier New',monospace">Live 🔥</text>
-<text x="499" y="362" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">via leetcode</text>
+<rect x="446" y="310" width="106" height="62" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="499" y="327" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">Streak</text>
+<text x="499" y="346" font-size="18" font-weight="700" fill="#d97706" text-anchor="middle" font-family="'Courier New',monospace">Live 🔥</text>
+<text x="499" y="362" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">via leetcode</text>
 
-<rect x="558" y="310" width="104" height="62" rx="6" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
-<text x="610" y="327" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">Global Rank</text>
-<text x="610" y="346" font-size="14" font-weight="700" fill="#ffd700" text-anchor="middle" font-family="'Courier New',monospace">${rankStr}</text>
-<text x="610" y="362" font-size="8" fill="#484f58" text-anchor="middle" font-family="'Courier New',monospace">leetcode.com</text>
+<rect x="558" y="310" width="104" height="62" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="610" y="327" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">Global Rank</text>
+<text x="610" y="346" font-size="14" font-weight="700" fill="#ca8a04" text-anchor="middle" font-family="'Courier New',monospace">${rankStr}</text>
+<text x="610" y="362" font-size="8" fill="#57606a" text-anchor="middle" font-family="'Courier New',monospace">leetcode.com</text>
 
-<text x="16" y="392" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">CONTRIBUTION ACTIVITY</text>
-<rect x="16" y="400" width="302" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
+<text x="16" y="392" font-size="9" fill="#57606a" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">CONTRIBUTION ACTIVITY</text>
+<rect x="16" y="400" width="302" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
 <g transform="translate(22, 404)">
   ${BH.map((h,i) => `<rect x="${i*6}" y="${40-h}" width="5" height="${h}" rx="1" fill="${BC[i]}" opacity="0.85"/>`).join('')}
 </g>
 
-<text x="330" y="392" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">TECH STACK</text>
-<rect x="330" y="400" width="334" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
+<text x="330" y="392" font-size="9" fill="#57606a" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">TECH STACK</text>
+<rect x="330" y="400" width="334" height="52" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
 
 ${techRow1}
 ${techRow2}
 
-<rect x="0" y="${H-2}" width="${W}" height="2" rx="1" fill="url(#redLine)"/>
+<rect x="0" y="${H-2}" width="${W}" height="2" rx="1" fill="url(#minimalLine)"/>
 </svg>`;
 }
 
@@ -269,7 +268,7 @@ export default async function handler(req, res) {
     res.status(200).send(svg);
   } catch (err) {
     const errSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="680" height="80">
-      <rect width="680" height="80" fill="#1a0000"/>
+      <rect width="680" height="80" fill="#ffffff"/>
       <text x="20" y="30" font-size="12" fill="#ff4444" font-family="monospace">ERROR: ${err.message}</text>
       <text x="20" y="52" font-size="10" fill="#884444" font-family="monospace">${(err.stack||'').split('\n')[1]||''}</text>
     </svg>`;
