@@ -1,15 +1,16 @@
 const GITHUB_USER   = "rs-raghu";
 const LEETCODE_USER = "rs-raghu";
-const BANNER_URL    = "https://raw.githubusercontent.com/rs-raghu/rs-raghu/main/assets/banner.png";
+// Pointing directly to your GIF
+const BANNER_URL    = "https://raw.githubusercontent.com/rs-raghu/rs-raghu/main/assets/banner.gif";
 
-// ─── Fetch & base64 encode banner image ──────────────
+// ─── Fetch & base64 encode banner image (GIF Support) ──────────────
 async function fetchBannerBase64() {
   try {
     const res = await fetch(BANNER_URL);
     if (!res.ok) return null;
     const buf = await res.arrayBuffer();
     const b64 = Buffer.from(buf).toString('base64');
-    const mime = res.headers.get("content-type") || "image/png";
+    const mime = res.headers.get("content-type") || "image/gif";
     return `data:${mime};base64,${b64}`;
   } catch {
     return null;
@@ -79,8 +80,8 @@ async function fetchLeetCode() {
 
 // ─── SVG Builder ─────────────────────────────────────
 function buildSVG(gh, lc, bannerData) {
-  // Height reduced from 560 to 480 because we removed social links
-  const W = 680, H = 480;
+  // Shrunk the height to 470px since social links are gone
+  const W = 680, H = 470;
 
   const r = 30, circ = 2 * Math.PI * r;
   const ef = lc.total > 0 ? lc.easy   / lc.total : 0;
@@ -96,47 +97,35 @@ function buildSVG(gh, lc, bannerData) {
   const starsBar = Math.round((gh.stars / Math.max(gh.stars, 500)) * 128);
   const reposBar = Math.round((gh.public_repos / Math.max(gh.public_repos, 80)) * 128);
 
-  const phrases = ["AI/ML Enthusiast","LeetCode Grinder","Open Source Contributor","Python Wrangler","Always Learning"];
-  const dur     = 12; 
-  const step    = dur / phrases.length; 
-
-  const typingTexts = phrases.map((p, i) => {
-    const start  = i * step;
-    const fadeIn = start;
-    const fadeOut= start + step - 0.3;
-    const kTimes = `${(fadeIn/dur).toFixed(3)};${((fadeIn+0.2)/dur).toFixed(3)};${(fadeOut/dur).toFixed(3)};${((fadeOut+0.2)/dur).toFixed(3)};${((i+1 === phrases.length) ? 1 : ((i+1)*step/dur)).toFixed(3)}`;
-    const kVals  = "0;1;1;0;0";
-    return `<text x="116" y="112" font-size="12" fill="#8b949e" font-family="'Courier New',monospace" opacity="0">
-      ${p}<animate attributeName="opacity" values="${kVals}" keyTimes="${kTimes}" dur="${dur}s" repeatCount="indefinite"/>
-    </text>`;
-  }).join('\n  ');
-
   const bannerEl = bannerData
     ? `<image href="${bannerData}" x="0" y="0" width="${W}" height="150"
         preserveAspectRatio="xMidYMid slice" clip-path="url(#bannerClip)"/>`
     : `<rect x="0" y="0" width="${W}" height="150" fill="#1a0505"/>`;
 
-  // Dynamic width calculation for tech pills to prevent overlap
+  // Dynamic width calculation for tech pills to guarantee NO overlap
   let xOffset1 = 340;
-  const techRow1 = ["Python", "Java", "JavaScript", "React", "SQL"].map((t) => {
-    const w = t.length * 7 + 14;
+  const techRow1 = ["Python", "Java", "JavaScript", "React", "HTML/CSS"].map((t) => {
+    const w = t.length * 7.5 + 14; 
     const res = `<rect x="${xOffset1}" y="408" width="${w}" height="18" rx="9" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
     <text x="${xOffset1 + w/2}" y="420" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
-    xOffset1 += w + 6;
+    xOffset1 += w + 8; // Added 8px of hard spacing between elements
     return res;
   }).join('\n');
 
   let xOffset2 = 340;
   const techRow2 = ["TensorFlow", "PyTorch", "Scikit", "NumPy", "Pandas"].map((t) => {
-    const w = t.length * 7 + 14;
+    const w = t.length * 7.5 + 14;
     const res = `<rect x="${xOffset2}" y="432" width="${w}" height="18" rx="9" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
     <text x="${xOffset2 + w/2}" y="444" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">${t}</text>`;
-    xOffset2 += w + 6;
+    xOffset2 += w + 8;
     return res;
   }).join('\n');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&amp;display=swap');
+  </style>
   <clipPath id="bannerClip"><rect x="0" y="0" width="${W}" height="150" rx="12" ry="12"/></clipPath>
   <clipPath id="cardClip"><rect x="0" y="0" width="${W}" height="${H}" rx="12" ry="12"/></clipPath>
   <linearGradient id="redLine" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -146,83 +135,39 @@ function buildSVG(gh, lc, bannerData) {
     <stop offset="70%"  stop-color="#8b0000"/>
     <stop offset="100%" stop-color="#0a0c0f"/>
   </linearGradient>
-  <linearGradient id="bannerFade" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#0a0c0f" stop-opacity="0.05"/>
-    <stop offset="55%"  stop-color="#0a0c0f" stop-opacity="0.45"/>
-    <stop offset="100%" stop-color="#0a0c0f" stop-opacity="1"/>
-  </linearGradient>
   <linearGradient id="leftVig" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"  stop-color="#0a0c0f" stop-opacity="0.75"/>
-    <stop offset="55%" stop-color="#0a0c0f" stop-opacity="0"/>
+    <stop offset="0%"  stop-color="#000000" stop-opacity="0.85"/>
+    <stop offset="40%" stop-color="#000000" stop-opacity="0"/>
   </linearGradient>
-  <filter id="redGlow">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
-    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-  <filter id="dimBanner" color-interpolation-filters="sRGB">
-    <feColorMatrix type="saturateMatrix" values="1.2"/>
-    <feComponentTransfer>
-      <feFuncR type="linear" slope="0.42"/>
-      <feFuncG type="linear" slope="0.42"/>
-      <feFuncB type="linear" slope="0.42"/>
-    </feComponentTransfer>
-  </filter>
 </defs>
 
 <rect width="${W}" height="${H}" rx="12" fill="#0a0c0f" clip-path="url(#cardClip)"/>
 
-<g filter="url(#dimBanner)">${bannerEl}</g>
-<rect x="0" y="0" width="${W}" height="150" fill="url(#bannerFade)"/>
+${bannerEl}
 <rect x="0" y="0" width="${W}" height="150" fill="url(#leftVig)"/>
 <rect x="0" y="0" width="${W}" height="2" rx="1" fill="url(#redLine)"/>
 
-<g transform="translate(22, 38)">
-  <circle cx="36" cy="36" r="36" fill="#0a0a0a" opacity="0.55"/>
-  <circle cx="36" cy="36" r="34" fill="none" stroke="#cc2200" stroke-width="1.5" opacity="0.55"/>
-  <circle cx="36" cy="27" r="18" fill="#cc2200" opacity="0.92" filter="url(#redGlow)">
-    <animate attributeName="opacity" values="0.82;0.98;0.82" dur="3s" repeatCount="indefinite"/>
-  </circle>
-  <ellipse cx="36" cy="58" rx="26" ry="6" fill="#090b0e"/>
-  <circle cx="36" cy="36" r="3.2" fill="#090b0e"/>
-  <rect x="34.2" y="39" width="3.5" height="11" rx="1.2" fill="#090b0e"/>
-  <rect x="29" y="41" width="6" height="2" rx="1" fill="#090b0e"/>
-  <rect x="37" y="41" width="6" height="2" rx="1" fill="#090b0e" transform="rotate(10 37 41)"/>
-  <rect x="32.5" y="49.5" width="2.5" height="7" rx="1.2" fill="#090b0e" transform="rotate(-5 32.5 49.5)"/>
-  <rect x="36" y="49.5" width="2.5" height="7" rx="1.2" fill="#090b0e" transform="rotate(5 36 49.5)"/>
-  <line x1="19" y1="30" x2="29" y2="40" stroke="#090b0e" stroke-width="1.4" opacity="0.7"/>
-</g>
-
-<text x="110" y="72" font-size="26" font-weight="700" fill="#e6edf3" font-family="'Courier New',monospace" letter-spacing="-0.5">Raghu</text>
-<text x="215" y="70" font-size="13" font-weight="400" fill="#cc2200" font-family="'Courier New',monospace">/ rs-raghu</text>
-
-${typingTexts}
-
-<rect x="110" y="122" width="38" height="17" rx="8.5" fill="#2a0808" stroke="#cc2200" stroke-width="0.8" opacity="0.85"/>
-<text x="129" y="134" font-size="9" fill="#ff6b6b" text-anchor="middle" font-family="'Courier New',monospace">India</text>
-<rect x="154" y="122" width="68" height="17" rx="8.5" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
-<text x="188" y="134" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">Open to Work</text>
-<rect x="228" y="122" width="42" height="17" rx="8.5" fill="#111519" stroke="#30363d" stroke-width="0.8"/>
-<text x="249" y="134" font-size="9" fill="#8b949e" text-anchor="middle" font-family="'Courier New',monospace">AI / ML</text>
+<text x="36" y="80" font-size="36" font-weight="600" fill="#ffffff" font-family="'Cinzel', serif, 'Courier New'" letter-spacing="2">Raghu</text>
+<text x="38" y="110" font-size="14" font-weight="400" fill="#ffb7b2" font-family="'Courier New',monospace" letter-spacing="1">AI / ML Enthusiast</text>
 
 <text x="16" y="174" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">ABOUT</text>
 
 <rect x="16" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <rect x="16" y="182" width="3" height="52" rx="1" fill="#cc2200"/>
-<text x="26" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">role</text>
-<text x="26" y="213" font-size="13" font-weight="600" fill="#e6edf3" font-family="'Courier New',monospace">AI / ML Dev</text>
-<text x="26" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Python · TensorFlow</text>
+<text x="28" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">role</text>
+<text x="28" y="213" font-size="14" font-weight="600" fill="#e6edf3" font-family="'Courier New',monospace">AI / ML Dev</text>
+<text x="28" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Python · TensorFlow</text>
 
 <rect x="232" y="182" width="206" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <rect x="232" y="182" width="3" height="52" rx="1" fill="#e84040"/>
-<text x="242" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">building</text>
-<text x="242" y="213" font-size="13" font-weight="600" fill="#e84040" font-family="'Courier New',monospace">winsomegin</text>
+<text x="244" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">building</text>
+<text x="244" y="213" font-size="14" font-weight="600" fill="#e84040" font-family="'Courier New',monospace">winsomegin</text>
 
 <rect x="448" y="182" width="216" height="52" rx="8" fill="#0f1114" stroke="#1e2328" stroke-width="1"/>
 <rect x="448" y="182" width="3" height="52" rx="1" fill="#ffa657"/>
-<text x="458" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">learning</text>
-<text x="458" y="213" font-size="13" font-weight="600" fill="#ffa657" font-family="'Courier New',monospace">ML Models</text>
-<text x="458" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">DSA · Data Structures</text>
-
+<text x="460" y="198" font-size="8" fill="#484f58" font-family="'Courier New',monospace">focusing on</text>
+<text x="460" y="213" font-size="14" font-weight="600" fill="#ffa657" font-family="'Courier New',monospace">ML Models &amp; DSA</text>
+<text x="460" y="226" font-size="9" fill="#6e7681" font-family="'Courier New',monospace">Algorithms · Training</text>
 
 <text x="16" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">GITHUB</text>
 <text x="340" y="254" font-size="9" fill="#484f58" letter-spacing="1.5" font-weight="600" font-family="'Courier New',monospace">LEETCODE — RS-RAGHU</text>
