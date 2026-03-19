@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Animated GitHub Profile Card — samurai theme",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=18"
   }
